@@ -4,17 +4,23 @@ showNotes();
 // funcion of add notes to local storage
 let addBtn = document.getElementById('addBtn')
 addBtn.addEventListener('click', function (e) {
+    let addTitle = document.getElementById('addTitle')
     let addtxt = document.getElementById('addTxt')
     let notes = localStorage.getItem("notes")
     if (notes == null) {
-        notesobj = []
+        notesobj = [];
     }
     else {
         notesobj = JSON.parse(notes)
     }
-    notesobj.push(addtxt.value)
+    let myobj ={
+        Title:addTitle.value,
+        Text: addtxt.value
+    }
+    notesobj.push(myobj)
     localStorage.setItem("notes", JSON.stringify(notesobj))
     addtxt.value = ""
+    addTitle.value =""
     // console.log(notesobj)
     showNotes();
 })
@@ -33,18 +39,20 @@ function showNotes() {
         html += `
         <div class="card my-2 mx-2" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">Note ${index + 1}</h5>
-          <p class="card-text">${element}</p>
+          <h5 class="card-title">${index+1} ${element.Title} </h5>
+          <p class="card-text">${element.Text}</p>
           <button id="${index}" onclick ="deleteNotes(this.id)" class="btn btn-primary">Delete Note</button>
         </div>
       </div>
         `
     })
     let notesElms = document.getElementById('notes')
-    if (notes.length != 0) {
+    if (notesobj.length != 0) {
         notesElms.innerHTML = html;
-    }
-}
+    }else {
+        notesElms.innerHTML = `Nothing to show! Use "Add a Note" section above to add notes.`;
+      }}
+
 
 // function of deleting notes from display
 function deleteNotes(index) {
